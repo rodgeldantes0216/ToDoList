@@ -21,6 +21,9 @@
 
         <!-- Scripts -->
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+        {{-- Livewire Styles --}}
+        @livewireStyles
     </head>
     <body>
         <div id="app">
@@ -88,6 +91,8 @@
         crossorigin="anonymous">  </script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
+        {{-- Livewire Scripts --}}
+        @livewireScripts
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @yield('scripts')
