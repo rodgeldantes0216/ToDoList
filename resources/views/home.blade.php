@@ -103,8 +103,20 @@
             });
         @elseif(session('danger_message'))
             Swal.fire({
-                title: 'Done!',
+                title: 'Invalid Input!',
                 text: '{{session('danger_message') }}',
+                icon: 'error',
+                timer: 3000,
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            });
+        @endif
+
+        @if(isset($_GET['action']) && $_GET['action'] == 'cancelled')
+            Swal.fire({
+                title: 'Action Cancelled!',
+                text: '',
                 icon: 'error',
                 timer: 3000,
                 showCancelButton: false,

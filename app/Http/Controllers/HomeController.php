@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Todo;
+
 
 class HomeController extends Controller
 {
@@ -24,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $get_todo_data = Todo::where("active_status", 1)->get();
+        $get_todo_data = Todo::where("active_status", 1)->where('user_id', Auth::id())->get();
 
         // return $get_todo_data;
 

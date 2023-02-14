@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\Todo;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\Todo as TD;
 
 class Todo extends Component
 {
-    public $task, $task_description;
+    public $task, $task_description, $errors_on_validation;
+    public $task_old_if_fail, $task_description_old_if_fail;
 
     /**
      * To Assign Null Value For The Following Fields.
@@ -37,32 +39,37 @@ class Todo extends Component
      * @return sucess || unsuccess
      */
 
-    public function create_new_record()
+    public function create()
     {
 
-        if($this->validate())
-        {
-            $to_dos = new TD();
-            $to_dos->task = $this->task;
-            $to_dos->task_description = $this->task_description;
-            $to_dos->active_status = 1;
+        $this->validate();
 
-            if($this->test_similarity($this->task) == true)
-            {
-                return redirect('/home')->with('danger_message', 'Invalid Input, Duplicate Data Found!');
-            }
-            else
-            {
-                if ($to_dos->save())
-                {
-                    return redirect('/home')->with('success_message', 'Task Has Been Succesfully Created!');
-                }else
-                {
-                    return redirect('/home')->with('danger_message', 'DATABASED ERROR!');
-                }
-            }
+        if($this->task == null && $this->task_description == null){
+            return redirect('/home')->with('danger_message', 'Please Fill The Fields First.');
         }
 
+        $to_dos = new TD();
+        $to_dos->user_id = Auth::id();
+        $to_dos->task = strtoupper($this->task);
+        $to_dos->task_description = strtoupper($this->task_description);
+        $to_dos->active_status = 1;
+
+        if($this->test_similarity($this->task) == true)
+        {
+            return redirect('/home')->with('danger_message', 'Duplicate Data Found.');
+        }
+        else
+        {
+            if ($to_dos->save())
+            {
+                return redirect('/home')->with('success_message', 'Task Has Been Succesfully Created!');
+            }else
+            {
+                $this->task_old_if_fail = $this->task;
+                $this->task_description_old_if_fail =  $this->task_description;
+                return redirect('/home')->with('danger_message', 'DATABASED ERROR!');
+            }
+        }
     }
 
     /**

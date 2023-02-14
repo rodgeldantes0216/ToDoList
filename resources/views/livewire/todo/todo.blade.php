@@ -1,4 +1,4 @@
-<form wire:submit.prevent="create_new_record" method="POST">
+<form wire:submit.prevent="create" method="POST">
     @csrf
     @php
         $upCaseField = 'style="text-transform:uppercase;"';
@@ -7,14 +7,14 @@
         <label for="task" class="col-md-2 col-form-label text-md-end">{{ __('Task') }}<span class="text-danger">*</span></label>
 
         <div class="col-md-10">
-            <input id="task" type="text" wire:model="task" wire:keyup="valOnly" class="form-control @error('task') is-invalid @enderror" name="task" value="{{ old('task') }}" placeholder="e.g: TASK" autocomplete="task" autofocus {!! $upCaseField !!}>
+            <input id="task" type="text" wire:model="task" wire:keyup="valOnly" class="form-control @error('task') is-invalid @enderror" name="task" placeholder="e.g: TASK" autocomplete="task" autofocus {!! $upCaseField !!}>
 
             @error('task')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-            {{ strtoupper($task) }}
+            {{-- {{ var_dump($errors->any()) }} --}}
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <label for="task_description" class="col-md-2 col-form-label text-md-end">{{ __('Task Description') }}</label>
 
         <div class="col-md-10">
-            <textarea id="task_description" wire:model="task_description" wire:keyup="valOnly" class="form-control @error('task_description') is-invalid @enderror" name="task_description" placeholder="e.g: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, qu..." {!! $upCaseField !!}>{{ old('task_description') }}</textarea>
+            <textarea id="task_description" wire:model="task_description" wire:keyup="valOnly" class="form-control @error('task_description') is-invalid @enderror" name="task_description" placeholder="e.g: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, qu..." {!! $upCaseField !!}></textarea>
 
             @error('task_description')
                 <span class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
     <div class="row">
         <div class="col-md-12">
 
-            <button type="button" class="btn btn-primary float-end" data-toggle="modal" data-target="#createModal">
+            <button type="button" class="btn btn-primary float-end {{ $errors->any() || empty($task) ? 'disabled' : 'is-valid' }}" data-toggle="modal" data-target="#createModal">
                 <i class="fas fa-plus"></i> Create
             </button>
 
@@ -52,8 +52,8 @@
                             Are You Sure You Want To Create New Task?
                         </div>
                         <div class="modal-footer">
-                            <button wire:click="redirect_back_with_action" class="btn btn-secondary">{{ __('No') }}</button>
-                            <button type="submit" class="btn btn-primary">
+                            <button wire:click="redirect_back_with_action" class="btn btn-danger">{{ __('No') }}</button>
+                            <button type="submit" class="btn btn-primary {{ $errors->any() ? 'disabled' : 'is-valid' }}">
                                 <i class="fas fa-save"></i> {{ __('Yes') }}
                             </button>
                         </div>
